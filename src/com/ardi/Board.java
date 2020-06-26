@@ -1,4 +1,4 @@
-package com.zetcode;
+package com.ardi;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,7 +20,7 @@ public class Board extends JPanel implements ActionListener {
     private final int DOT_SIZE = 20;
     private final int ALL_DOTS = B_HEIGHT * B_WIDTH;
     private final int RAND_POS = 29;
-    private final int DELAY = 1000;
+    private final int DELAY = 100;
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -41,15 +41,18 @@ public class Board extends JPanel implements ActionListener {
     private Image head;
 
     public Board() {
-        
+
         initBoard();
     }
-    
+
+    public void restartGame() {
+        initGame();
+    }
+
     private void initBoard() {
 
         addKeyListener(new TAdapter());
         setBackground(Color.black);
-        setFocusable(true);
 
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         loadImages();
@@ -69,6 +72,9 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void initGame() {
+        setFocusable(true);
+        grabFocus();
+        inGame = true;
 
         dots = 50;
 
@@ -76,10 +82,12 @@ public class Board extends JPanel implements ActionListener {
             x[z] = 2 - z;
             y[z] = 2;
         }
-        
+
         locateApple();
 
-        timer = new Timer(DELAY, this);
+        if (timer == null) {
+            timer = new Timer(DELAY, this);
+        }
         timer.start();
     }
 
@@ -89,9 +97,9 @@ public class Board extends JPanel implements ActionListener {
 
         doDrawing(g);
     }
-    
+
     private void doDrawing(Graphics g) {
-        
+
         if (inGame) {
 
             g.drawImage(apple, apple_x * DOT_SIZE, apple_y * DOT_SIZE, this);
@@ -107,14 +115,13 @@ public class Board extends JPanel implements ActionListener {
             Toolkit.getDefaultToolkit().sync();
 
         } else {
-
             gameOver(g);
 
-        }        
+        }
     }
 
     private void gameOver(Graphics g) {
-        
+
         String msg = "Game Over";
         Font small = new Font("Helvetica", Font.BOLD, 14);
         FontMetrics metr = getFontMetrics(small);
@@ -122,8 +129,6 @@ public class Board extends JPanel implements ActionListener {
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
-        JButton b = new JButton("button");
-        super.add(b);
     }
 
     private void checkApple() {
@@ -183,7 +188,7 @@ public class Board extends JPanel implements ActionListener {
         if (x[0] < 0) {
             inGame = false;
         }
-        
+
         if (!inGame) {
             timer.stop();
         }
