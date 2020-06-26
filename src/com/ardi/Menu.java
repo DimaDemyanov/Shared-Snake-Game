@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 public class Menu extends JPanel {
 
-    private final int B_WIDTH = 300;
+    private final int B_WIDTH = 100;
     private final int B_HEIGHT = 300;
 
     private Board board;
@@ -18,7 +18,7 @@ public class Menu extends JPanel {
     }
 
     private void initMenu() {
-        setBackground(Color.CYAN);
+        setBackground(Color.DARK_GRAY);
         //setFocusable(true);
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
 
