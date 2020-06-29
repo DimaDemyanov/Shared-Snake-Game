@@ -22,6 +22,8 @@ public class Board extends JPanel implements ActionListener {
     private final int RAND_POS = 29;
     private final int DELAY = 100;
 
+    private int count = 0;
+
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
 
@@ -75,7 +77,10 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
         grabFocus();
         inGame = true;
-
+        rightDirection = true;
+        leftDirection = false;
+        upDirection = false;
+        downDirection = false;
         dots = 50;
 
         for (int z = 0; z < dots; z++) {
@@ -113,7 +118,13 @@ public class Board extends JPanel implements ActionListener {
             }
 
             Toolkit.getDefaultToolkit().sync();
+            String msg = "Score:" + count;
+            Font small = new Font("Helvetica", Font.BOLD, 16);
+            FontMetrics metr = getFontMetrics(small);
 
+            g.setColor(Color.red);
+            g.setFont(small);
+            g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) , 30 / 2);
         } else {
             gameOver(g);
 
@@ -129,12 +140,14 @@ public class Board extends JPanel implements ActionListener {
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
+        count = 0;
     }
 
     private void checkApple() {
 
         if ((x[0] == apple_x) && (y[0] == apple_y)) {
 
+            count++;
             dots++;
             locateApple();
         }
@@ -173,7 +186,7 @@ public class Board extends JPanel implements ActionListener {
             }
         }
 
-        if (y[0] >= B_HEIGHT) {
+        if (y[0] >= B_HEIGHT / DOT_SIZE) {
             inGame = false;
         }
 
@@ -181,7 +194,7 @@ public class Board extends JPanel implements ActionListener {
             inGame = false;
         }
 
-        if (x[0] >= B_WIDTH) {
+        if (x[0] >= B_WIDTH / DOT_SIZE) {
             inGame = false;
         }
 
